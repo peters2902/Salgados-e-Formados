@@ -7,6 +7,50 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'vendor/autoload.php'; // Inclua o autoload do Composer
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $nome = $_POST['nome'];
+    $email = $_POST['email'];
+    $produto = $_POST['produto'];
+    $quantidade = $_POST['quantidade'];
+    $mensagem = $_POST['mensagem'];
+
+    $mail = new PHPMailer(true);
+
+    try {
+        // Configurações do servidor SMTP
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'seu_email@gmail.com'; // Seu e-mail Gmail
+        $mail->Password = 'sua_senha'; // Sua senha do Gmail
+        $mail->SMTPSecure = 'tls';
+        $mail->Port = 587;
+
+        // Destinatários
+        $mail->setFrom('seu_email@gmail.com', 'Venda de Salgados'); // Seu e-mail
+        $mail->addAddress('gustavohenriquepg@icloud.com'); // E-mail para receber os pedidos
+
+        // Conteúdo do e-mail
+        $mail->isHTML(false);
+        $mail->Subject = 'Novo Pedido de Salgado';
+        $mail->Body = "Nome: $nome\nEmail: $email\nProduto: $produto\nQuantidade: $quantidade\nMensagem: $mensagem";
+
+        $mail->send();
+        echo 'Pedido enviado com sucesso!';
+    } catch (Exception $e) {
+        echo "Erro ao enviar o pedido: {$mail->ErrorInfo}";
+    }
+}
+?>
+<form method="POST" action="seu_script_de_envio.php">
+    <!-- campos do formulário -->
+</form>
 
 </body>
 </html>
