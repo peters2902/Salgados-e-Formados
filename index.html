@@ -33,8 +33,7 @@
             color: #495057;
         }
         input[type="text"],
-        input[type="number"],
-        select {
+        input[type="number"] {
             width: 100%;
             padding: 12px;
             margin: 5px 0 15px;
@@ -43,8 +42,7 @@
             transition: border-color 0.3s;
         }
         input[type="text"]:focus,
-        input[type="number"]:focus,
-        select:focus {
+        input[type="number"]:focus {
             border-color: #80bdff;
             outline: none;
         }
@@ -76,12 +74,18 @@
             // Obtém os valores dos campos
             const nome = document.getElementById('nome').value;
             const telefone = document.getElementById('telefone').value;
-            const produto = document.getElementById('produto').value;
             const quantidade = document.getElementById('quantidade').value;
             const turma = document.getElementById('turma').value;
 
+            // Obtém os produtos selecionados
+            const produtosSelecionados = [];
+            const checkboxes = document.querySelectorAll('input[name="produto"]:checked');
+            checkboxes.forEach((checkbox) => {
+                produtosSelecionados.push(checkbox.value);
+            });
+
             // Monta a mensagem para o WhatsApp
-            const textoMensagem = `*Novo Pedido*\nNome: ${nome}\nTelefone: ${telefone}\nProduto: ${produto}\nQuantidade: ${quantidade}\nTurma: ${turma}`;
+            const textoMensagem = `*Novo Pedido*\nNome: ${nome}\nTelefone: ${telefone}\nProdutos: ${produtosSelecionados.join(', ')}\nQuantidade: ${quantidade}\nTurma: ${turma}`;
 
             // Codifica a mensagem para URL
             const mensagemCodificada = encodeURIComponent(textoMensagem);
@@ -104,12 +108,12 @@
             <label for="telefone">Telefone:</label>
             <input type="text" id="telefone" name="telefone" required placeholder="Ex: 41999331533">
 
-            <label for="produto">Escolha seu Produto:</label>
-            <select id="produto" name="produto" required>
-                <option value="hamburgao">Hamburgão - R$ 10,90</option>
-                <option value="croissant_chocolate">Croissant de Chocolate - R$ 10,90</option>
-                <option value="suco">Suco - R$ 5,00</option>
-            </select>
+            <label>Escolha seus Produtos:</label>
+            <div>
+                <label><input type="checkbox" name="produto" value="Hamburgão - R$ 7,00"> Hamburgão - R$ 7,00</label>
+                <label><input type="checkbox" name="produto" value="Suco - R$ 4,00"> Suco - R$ 4,00</label>
+                <label><input type="checkbox" name="produto" value="Kit Hamburgão + Suco - R$ 10,00"> Kit Hamburgão + Suco - R$ 10,00</label>
+            </div>
 
             <label for="quantidade">Quantidade:</label>
             <input type="number" id="quantidade" name="quantidade" min="1" required>
@@ -119,6 +123,7 @@
 
             <input type="submit" value="Enviar Pedido">
         </form>
+
         <div class="footer">© 2026 Todos os direitos reservados.</div>
     </div>
 </body>
